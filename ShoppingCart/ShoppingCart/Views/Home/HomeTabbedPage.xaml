@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<TabbedPage
+    x:Class="ShoppingCart.Views.Home.HomeTabbedPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+    xmlns:bookmarksView="clr-namespace:ShoppingCart.Views.Bookmarks"
+    xmlns:catalogViews="clr-namespace:ShoppingCart.Views.Catalog"
+	xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+	xmlns:aboutUs="clr-namespace:ShoppingCart.Views.AboutUs;assembly=ShoppingCart"
+	ios:Page.UseSafeArea="true"
+    Title="Shopping Cart"
+    android:TabbedPage.BarItemColor="{DynamicResource Gray-600}"
+    android:TabbedPage.BarSelectedItemColor="{DynamicResource PrimaryColor}"
+    android:TabbedPage.IsSwipePagingEnabled="False"
+    android:TabbedPage.ToolbarPlacement="Bottom"
+    BarBackgroundColor="White">
+
+    <!--  Product home page  -->
+    <catalogViews:ProductHomePage Title="Home">
+        <catalogViews:ProductHomePage.IconImageSource>
+            <FontImageSource
+                FontFamily="{StaticResource FontIcons}"
+                Glyph="{StaticResource HomeIcon}"
+                Size="16" />
+        </catalogViews:ProductHomePage.IconImageSource>
+    </catalogViews:ProductHomePage>
+
+    <!--  Wishlist page  -->
+    <catalogViews:CategoryTilePage Title="Category">
+        <catalogViews:CategoryTilePage.IconImageSource>
+            <FontImageSource
+                FontFamily="{StaticResource FontIcons}"
+                Glyph="{StaticResource CategoryIcon}"
+                Size="16" />
+        </catalogViews:CategoryTilePage.IconImageSource>
+    </catalogViews:CategoryTilePage>
+
+
+    <!--  Wishlist page  -->
+    <bookmarksView:WishlistPage Title="Wishlist">
+        <bookmarksView:WishlistPage.IconImageSource>
+            <FontImageSource
+                FontFamily="{StaticResource FontIcons}"
+                Glyph="{StaticResource WishlistIcon}"
+                Size="16" />
+        </bookmarksView:WishlistPage.IconImageSource>
+    </bookmarksView:WishlistPage>
+
+    <aboutUs:AboutUsSimplePage Title="Aboutus">
+        <aboutUs:AboutUsSimplePage.IconImageSource>
+            <FontImageSource
+                FontFamily="{StaticResource FontIcons}"
+                Glyph="{StaticResource HelpIcon}"
+                Size="16" />
+        </aboutUs:AboutUsSimplePage.IconImageSource>
+    </aboutUs:AboutUsSimplePage>
+
+
+</TabbedPage>

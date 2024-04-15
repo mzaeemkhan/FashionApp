@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage
+    x:Class="ShoppingCart.Views.Bookmarks.WishlistPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="clr-namespace:ShoppingCart.Behaviors"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:cartBehavior="clr-namespace:ShoppingCart.Behaviors.Catalog"
+    xmlns:controls="clr-namespace:ShoppingCart.Controls"
+    xmlns:emptyView="clr-namespace:ShoppingCart.Views.ErrorAndEmpty"
+    xmlns:converter="clr-namespace:ShoppingCart.Converters"
+    xmlns:helper="clr-namespace:ShoppingCart.Helpers"
+    xmlns:listView="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+    xmlns:pulltoRefresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms"
+	xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+	xmlns:controls1="clr-namespace:MarcTron.Plugin.Controls;assembly=Plugin.MtAdmob"
+	xmlns:xForms="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+	xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+	ios:Page.UseSafeArea="true"
+    x:Name="wishlistPage"
+    Title="Wishlist"
+    BackgroundColor="{DynamicResource Gray-100}"
+    NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.Behaviors>
+        <cartBehavior:CartBehavior />
+    </ContentPage.Behaviors>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <converter:VisibilityConverter x:Key="visibilityConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid>
+            <Grid>
+            <emptyView:EmptyView Grid.Row="0" IsVisible="{Binding IsEmptyViewVisible}">
+                <x:Arguments>
+                <x:Boolean>true</x:Boolean>
+                  <x:String>WISHLIST IS EMPTY</x:String>
+                  <x:String>You don't have any items in your wish list</x:String>
+                    <x:String>EmptyCart.svg</x:String>
+                </x:Arguments>
+            </emptyView:EmptyView>
+
+            <Grid RowSpacing="0" Grid.Row="0"
+                  IsVisible="{Binding IsEmptyViewVisible, Converter={StaticResource visibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+
+                </Grid.RowDefinitions>
+
+                <!--  Title View  -->
+                <controls:TitleView
+                    Title="Wishlist"
+                    Grid.Row="0"
+                    BackgroundColor="{DynamicResource Gray-White}">
+                    <controls:TitleView.LeadingView>
+                        <buttons:SfButton
+                            x:Name="backButton"
+                            Command="{Binding Path=BindingContext.BackButtonCommand, Source={x:Reference wishlistPage}}"
+                            CommandParameter="{x:Reference backButton}"
+                            CornerRadius="4"
+                            Style="{StaticResource IconButtonStyle}"
+                            Text="{StaticResource Back}" />
+                    </controls:TitleView.LeadingView>
+                </controls:TitleView>
+
+                    <controls1:MTAdView x:Name="myAds" Grid.Row="1" IsVisible="true" AdsId="ca-app-pub-6116207491368126/5635382208"  VerticalOptions="EndAndExpand" >
+                    <controls1:MTAdView.HeightRequest>
+                        <x:OnIdiom>
+                            <x:OnIdiom.Phone>50</x:OnIdiom.Phone>
+                            <x:OnIdiom.Tablet>90</x:OnIdiom.Tablet>
+                            <x:OnIdiom.Desktop>90</x:OnIdiom.Desktop>
+                        </x:OnIdiom>
+                    </controls1:MTAdView.HeightRequest>
+                </controls1:MTAdView>
+
+                <pulltoRefresh:SfPullToRefresh
+                    x:Name="pullToRefresh"
+                    Grid.Row="2"
+                    BackgroundColor="White"
+                    IsRefreshing="False"
+                    ProgressBackgroundColor="{DynamicResource Gray-White}"
+                    ProgressStrokeColor="{DynamicResource PrimaryColor}"
+                    PullingThreshold="60"
+                    RefreshContentHeight="50"
+                    RefreshContentWidth="50"
+                    TransitionMode="Push">
+
+                    <pulltoRefresh:SfPullToRefresh.Behaviors>
+                        <behaviors:SfPullToRefreshBehavior />
+                    </pulltoRefresh:SfPullToRefresh.Behaviors>
+
+                    <pulltoRefresh:SfPullToRefresh.PullableContent>
+
+                        <!--  Cart items  -->
+                        <listView:SfListView
+                            x:Name="WishlistLayout"
+                            AllowSwiping="True"
+                            BackgroundColor="{OnIdiom Default={StaticResource Transparent},
+                                                  Desktop={StaticResource Gray-White},
+                                                  Converter={StaticResource DynamicResourceToColorConverter}}"
+                            ItemSize="120"
+                            ItemsSource="{Binding WishlistDetails}"
+                            SelectionMode="None"
+                            SwipeOffset="88"
+                            VerticalOptions="Start">
+
+                            <listView:SfListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid
+                                        Margin="0,16,0,0"
+                                        BackgroundColor="{DynamicResource Gray-White}"
+                                        ColumnSpacing="0"
+                                        RowSpacing="0">
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="{OnIdiom Default=1, Phone=0}" />
+                                        </Grid.RowDefinitions>
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!--  Product image  -->
+                                            <forms:CachedImage Grid.Row="0"
+                                                               Grid.RowSpan="4"
+                                                               Grid.Column="0"
+                                                               Margin="16,0"
+                                                               Aspect="AspectFit"
+                                                               BackgroundColor="{DynamicResource Gray-200}"
+                                                               HeightRequest="120"
+                                                               WidthRequest="120"
+                                                               DownsampleToViewSize="true"
+                                                               LoadingPlaceholder="loading.png" ErrorPlaceholder="error.png"
+                                                               Source = "{Binding PreviewImage}">
+                                            </forms:CachedImage>
+
+                                            <!--  Product name  -->
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            Margin="0,8,0,4"
+                                            FontFamily="{StaticResource Montserrat-SemiBold}"
+                                            FontSize="14"
+                                            HorizontalOptions="StartAndExpand"
+                                            LineBreakMode="TailTruncation"
+                                            MaxLines="1"
+                                            Style="{StaticResource LabelStyle}"
+                                            Text="{Binding Name}"
+                                            TextColor="{DynamicResource Gray-900}" />
+
+                                        <StackLayout
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Margin="0"
+                                            Padding="0"
+                                            Orientation="Horizontal"
+                                            Spacing="4">
+
+                                            <!--  Product price  -->
+                                            <Label
+                                                FontFamily="{StaticResource Montserrat-SemiBold}"
+                                                FontSize="16"
+                                                HorizontalOptions="Start"
+                                                Style="{StaticResource LabelStyle}"
+                                                Text="{Binding DiscountPrice, StringFormat='&#8360;{0:0 }'}"
+                                                TextColor="{DynamicResource PrimaryColor}" />
+
+                                            <Label
+                                                FontFamily="{DynamicResource Montserrat-Medium}"
+                                                FontSize="8"
+                                                HorizontalOptions="Start"
+                                                Style="{StaticResource LabelStyle}"
+                                                Text="{Binding ActualPrice, StringFormat='&#8360;{0:0.00}'}"
+                                                TextDecorations="Strikethrough"
+                                                VerticalTextAlignment="Center" />
+
+                                            <Label
+                                                FontFamily="{DynamicResource Montserrat-Medium}"
+                                                FontSize="8"
+                                                HorizontalOptions="Start"
+                                                Style="{StaticResource LabelStyle}"
+                                                Text="{Binding DiscountPercent, StringFormat=' ({0}% OFF)'}"
+                                                TextColor="{DynamicResource PrimaryColor}"
+                                                VerticalTextAlignment="Center" />
+
+                                        </StackLayout>
+
+                                        <StackLayout
+                                            Grid.Row="2"
+                                            Grid.Column="1"
+                                            Margin="0"
+                                            Padding="0"
+                                            HorizontalOptions="Start"
+                                            Orientation="Horizontal"
+                                            Spacing="0"
+                                            VerticalOptions="Start">
+
+
+                                            <!--  Remove button  -->
+                                            <buttons:SfButton
+                                                helper:RTLHelper.Margin="{OnIdiom Default='44,0,16,0',
+                                                                              Phone='8,0,0,0'}"
+                                                Command="{Binding Path=BindingContext.AddToCartCommand, Source={x:Reference WishlistLayout}}"
+                                                CommandParameter="{Binding .}"
+                                                CornerRadius="4"
+                                                FontFamily="{StaticResource Montserrat-SemiBold}"
+                                                FontSize="12"
+                                                HeightRequest="40"
+                                                HorizontalOptions="Start"
+                                                HorizontalTextAlignment="Center"
+                                                Style="{StaticResource SfButtonStyle}"
+                                                Text="Open Details"
+                                                TextColor="{DynamicResource HyperLink}"
+                                                VerticalOptions="Center"
+                                                VerticalTextAlignment="Center" />
+                                        </StackLayout>
+
+                                    </Grid>
+                                </DataTemplate>
+                            </listView:SfListView.ItemTemplate>
+
+                            <listView:SfListView.RightSwipeTemplate>
+                                <DataTemplate x:Name="RightSwipeTemplate">
+                                    <Grid
+                                        Margin="0,16,0,0"
+                                        BackgroundColor="{DynamicResource Red}"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="Fill">
+                                        <Label
+                                            BackgroundColor="Transparent"
+                                            FontFamily="{StaticResource FontIcons}"
+                                            FontSize="30"
+                                            HorizontalOptions="Center"
+                                            Text="{StaticResource Delete}"
+                                            TextColor="{DynamicResource Gray-White}"
+                                            VerticalOptions="Center" />
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding Path=BindingContext.DeleteCommand, Source={x:Reference WishlistLayout}}"
+                                                CommandParameter="{Binding .}" />
+                                        </Grid.GestureRecognizers>
+                                    </Grid>
+                                </DataTemplate>
+                            </listView:SfListView.RightSwipeTemplate>
+                        </listView:SfListView>
+
+                    </pulltoRefresh:SfPullToRefresh.PullableContent>
+                </pulltoRefresh:SfPullToRefresh>
+            </Grid>
+
+            <!-- Place the Admob controls here -->
+          
+        </Grid>
+            <xForms:SfBusyIndicator x:Name="busyindicator" 
+                                    AnimationType="SingleCircle" 
+                                    ViewBoxWidth = "100" 
+                                    ViewBoxHeight="100" 
+                                    TextColor="Maroon" 
+                                    EnableAnimation="True"
+                                    IsBusy="{Binding IsBusy}"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

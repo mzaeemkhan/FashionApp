@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ShoppingCart.Views.Catalog.CatalogTilePage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:badge="clr-namespace:Syncfusion.XForms.BadgeView;assembly=Syncfusion.SfBadgeView.XForms"
+    xmlns:behavior="clr-namespace:ShoppingCart.Behaviors.Catalog"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:commonBehavior="clr-namespace:ShoppingCart.Behaviors"
+    xmlns:controls="clr-namespace:ShoppingCart.Controls"
+    xmlns:converter="clr-namespace:ShoppingCart.Converters"
+    xmlns:core="clr-namespace:Syncfusion.XForms.Core;assembly=Syncfusion.Core.XForms"
+    xmlns:listView="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+    xmlns:template="clr-namespace:ShoppingCart.Views.Templates"
+    xmlns:controls1="clr-namespace:MarcTron.Plugin.Controls;assembly=Plugin.MtAdmob"
+    xmlns:errorAndEmpty="clr-namespace:ShoppingCart.Views.ErrorAndEmpty;assembly=ShoppingCart"
+    xmlns:xForms="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+    x:Name="catalogTilePage"
+    Title="Catalog Tile page"
+    NavigationPage.HasNavigationBar="False"
+    Style="{StaticResource ContentPageStyle}">
+
+    <ContentPage.Behaviors>
+        <behavior:CartBehavior />
+    </ContentPage.Behaviors>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <OnIdiom x:Key="ListItemMargin" x:TypeArguments="Thickness" />
+            <converter:BooleanToColorConverter x:Key="BoolToColorConverter" />
+            <converter:BooleanToStringConverter x:Key="BoolToStringConverter" />
+            <converter:IntToThicknessConverter x:Key="intToThicknessConverter" />
+            <converter:VisibilityConverter x:Key="visibilityConverter" />
+            <converter:InverseBoolConverter x:Key="inverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid>
+      
+            <Grid>
+                <errorAndEmpty:EmptyView Grid.Row="0" IsVisible="{Binding IsEmptyViewVisible}">
+                    <x:Arguments>
+                        <x:Boolean>true</x:Boolean>
+                        <x:String>LIST IS EMPTY</x:String>
+                        <x:String>Currently, There are no items in this list</x:String>
+                        <x:String>EmptyCart.svg</x:String>
+                    </x:Arguments>
+                </errorAndEmpty:EmptyView>
+
+                <Grid RowSpacing="0" Grid.Row="0"
+                  IsVisible="{Binding IsEmptyViewVisible, Converter={StaticResource visibilityConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+
+                    </Grid.RowDefinitions>
+
+                    <!--  Title View  -->
+                    <controls:TitleView Title="Catalog" Grid.Row="0">
+                        <controls:TitleView.LeadingView>
+                            <buttons:SfButton
+                        x:Name="backButton"
+                        Command="{Binding BindingContext.BackButtonCommand, Source={x:Reference catalogTilePage}}"
+                        CommandParameter="{x:Reference backButton}"
+                        CornerRadius="4"
+                        Style="{StaticResource IconButtonStyle}"
+                        Text="{StaticResource Back}" />
+                        </controls:TitleView.LeadingView>
+                    </controls:TitleView>
+
+                    <controls1:MTAdView x:Name="myAds" Grid.Row="1" IsVisible="true" AdsId="ca-app-pub-6116207491368126/5635382208"  VerticalOptions="EndAndExpand" >
+                        <controls1:MTAdView.HeightRequest>
+                            <x:OnIdiom>
+                                <x:OnIdiom.Phone>50</x:OnIdiom.Phone>
+                                <x:OnIdiom.Tablet>90</x:OnIdiom.Tablet>
+                                <x:OnIdiom.Desktop>90</x:OnIdiom.Desktop>
+                            </x:OnIdiom>
+                        </controls1:MTAdView.HeightRequest>
+                    </controls1:MTAdView>
+
+                    <!--  ListView for catalog  -->
+                    <listView:SfListView
+                x:Name="ListViewTile"
+                Grid.Row="2"
+                Padding="8"
+                ItemSize="120"
+                AutoFitMode="Height"
+                LoadMoreOption="AutoOnScroll"
+                LoadMoreCommand="{Binding LoadMoreItemsCommand}"
+                LoadMoreCommandParameter="{Binding Source={x:Reference ListViewTile}}"
+                HeaderTemplate="{StaticResource CatalogDefaultHeaderTemplate}"
+                HorizontalOptions="FillAndExpand"
+                IsStickyHeader="True"
+                ItemSpacing="0, 8, 0, 8"
+                ItemsSource="{Binding Products}"
+                Style="{StaticResource SfListViewStyle}">
+                        <listView:SfListView.LoadMoreTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Label Text="Loading More Items..." TextColor="Black" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" IsVisible="{Binding IsBusy, Converter={StaticResource inverseBoolConverter}, Source={x:Reference Name=ListViewTile}}" />
+                                </Grid>
+                            </DataTemplate>
+                        </listView:SfListView.LoadMoreTemplate>
+
+                        <listView:SfListView.Behaviors>
+                            <commonBehavior:SfListViewTapBehavior Command="{Binding Path=BindingContext.ItemSelectedCommand, Source={x:Reference catalogTilePage}}" />
+                        </listView:SfListView.Behaviors>
+
+                        <listView:SfListView.ItemTemplate>
+                            <DataTemplate>
+                                <template:ProductTileTemplate ParentBindingContext="{Binding Path=BindingContext, Source={x:Reference catalogTilePage}}" />
+                            </DataTemplate>
+                        </listView:SfListView.ItemTemplate>
+
+                        <!--  Layout to customize number of columns in SfListView  -->
+                        <listView:SfListView.LayoutManager>
+                            <listView:GridLayout SpanCount="{core:OnPlatformOrientationIntValue Desktop=5, PhonePortrait=2, PhoneLandscape=4, TabletPortrait=4, TabletLandscape=5}" />
+                        </listView:SfListView.LayoutManager>
+
+                    </listView:SfListView>
+
+                </Grid>
+            </Grid>
+            <xForms:SfBusyIndicator x:Name="busyindicator" 
+                                    AnimationType="SingleCircle" 
+                                    ViewBoxWidth = "100" 
+                                    ViewBoxHeight="100" 
+                                    TextColor="Maroon" 
+                                    Title="{Binding BusyTitle}"
+                                    EnableAnimation="True"
+                                    IsBusy="{Binding IsBusy}"/>
+        </Grid>
+       
+    </ContentPage.Content>
+
+</ContentPage>

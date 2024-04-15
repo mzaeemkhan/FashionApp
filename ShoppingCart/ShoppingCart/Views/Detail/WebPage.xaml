@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:xForms="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+             mc:Ignorable="d"
+             x:Class="ShoppingCart.Views.Detail.WebPage">
+    <ContentPage.Content>
+      
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <WebView x:Name="browser"   />
+                <xForms:SfBusyIndicator x:Name="busyindicator" 
+                                        AnimationType="SingleCircle" 
+                                        ViewBoxWidth = "100" 
+                                        ViewBoxHeight="100" 
+                                        EnableAnimation="True"
+                                        TextColor="Maroon" 
+                                        IsBusy="True"
+                                        Title="Opening Product Link"
+                />
+            </Grid>
+        
+
+    </ContentPage.Content>
+</ContentPage>

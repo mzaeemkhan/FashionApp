@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage
+    x:Class="ShoppingCart.Views.Catalog.CategoryTilePage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behavior="clr-namespace:ShoppingCart.Behaviors"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:controls="clr-namespace:ShoppingCart.Controls"
+    xmlns:core="clr-namespace:Syncfusion.XForms.Core;assembly=Syncfusion.Core.XForms"
+    xmlns:listView="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+	xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+	xmlns:controls1="clr-namespace:MarcTron.Plugin.Controls;assembly=Plugin.MtAdmob"
+	xmlns:xForms="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+	xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+	ios:Page.UseSafeArea="true"
+    x:Name="categoryPage"
+    Title="Categories"
+    BackgroundColor="{DynamicResource Gray-White}"
+    NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+<Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--  Title View  -->
+            <controls:TitleView Title="{Binding TitleName}" Grid.Row="0">
+                <controls:TitleView.LeadingView>
+                    <buttons:SfButton
+                        x:Name="backButton"
+                        Command="{Binding BindingContext.BackButtonCommand, Source={x:Reference CategoryTile}}"
+                        CommandParameter="{x:Reference backButton}"
+                        CornerRadius="4"
+                        Style="{StaticResource IconButtonStyle}"
+                        Text="{StaticResource Back}" />
+                </controls:TitleView.LeadingView>
+            </controls:TitleView>
+
+                <controls1:MTAdView x:Name="myAds" Grid.Row="1" AdsId="ca-app-pub-6116207491368126/5635382208" IsVisible="true"  VerticalOptions="EndAndExpand" >
+                <controls1:MTAdView.HeightRequest>
+                    <x:OnIdiom>
+                        <x:OnIdiom.Phone>50</x:OnIdiom.Phone>
+                        <x:OnIdiom.Tablet>90</x:OnIdiom.Tablet>
+                        <x:OnIdiom.Desktop>90</x:OnIdiom.Desktop>
+                    </x:OnIdiom>
+                </controls1:MTAdView.HeightRequest>
+            </controls1:MTAdView>
+
+            <!--  ListView for Category  -->
+            <listView:SfListView
+                x:Name="CategoryTile"
+                Padding="8"
+                Grid.Row="2"
+                AutoFitMode="Height"
+                HorizontalOptions="FillAndExpand"
+                ItemSpacing="8"
+                ItemsSource="{Binding Categories}"
+                Style="{StaticResource SfListViewStyle}">
+
+                <listView:SfListView.Behaviors>
+                    <behavior:SfListViewTapBehavior
+                        Command="{Binding Path=BindingContext.CategorySelectedCommand, Source={x:Reference categoryPage}}" />
+                </listView:SfListView.Behaviors>
+
+                <listView:SfListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid RowSpacing="8">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!--  Category Image  -->
+
+                                <forms:CachedImage 
+                                    Grid.Row="0"
+                                    Aspect="AspectFill"
+                                    BackgroundColor="{DynamicResource Gray-200}"
+                                    HeightRequest="{OnIdiom Phone=150,
+                                                        Tablet=240,
+                                                        Desktop=120}"
+                                    WidthRequest="{OnIdiom Phone=160,
+                                                       Tablet=224,
+                                                       Desktop=200}"
+                                               DownsampleToViewSize="true"
+                                               LoadingPlaceholder="loading.png" ErrorPlaceholder="error.png"
+                                               Source = "{Binding Icon}">
+                            </forms:CachedImage>
+
+                            <!--  Category Name  -->
+                            <Label
+                                Grid.Row="1"
+                                Margin="0,0,0,8"
+                                FontFamily="{StaticResource Montserrat-SemiBold}"
+                                FontSize="14"
+                                HorizontalOptions="CenterAndExpand"
+                                HorizontalTextAlignment="Center"
+                                LineHeight="{OnPlatform Default=-1,
+                                                        Android=1.5}"
+                                Text="{Binding Name}"
+                                TextColor="{DynamicResource Gray-900}" />
+
+                        </Grid>
+                    </DataTemplate>
+                </listView:SfListView.ItemTemplate>
+
+                <!--  Layout to customize no. of columns in SfListView  -->
+                <listView:SfListView.LayoutManager>
+                    <listView:GridLayout
+                        SpanCount="{core:OnPlatformOrientationIntValue Desktop=4, PhonePortrait=2, PhoneLandscape=3, TabletPortrait=3, TabletLandscape=4}" />
+                </listView:SfListView.LayoutManager>
+
+            </listView:SfListView>
+
+
+        </Grid>
+    <xForms:SfBusyIndicator x:Name="busyindicator" 
+                            AnimationType="SingleCircle" 
+                            ViewBoxWidth = "100" 
+                            ViewBoxHeight="100" 
+                            EnableAnimation="True"
+                            Title="{Binding BusyTitle}"
+                            TextColor="Maroon" 
+                            IsBusy="{Binding IsBusy}"/>
+</Grid>
+    </ContentPage.Content>
+</ContentPage>
